@@ -8,6 +8,7 @@ import com.ply.flashsalessystem.entity.status.OrderStatus;
 import com.ply.flashsalessystem.entity.vo.OrderForStoreVo;
 import com.ply.flashsalessystem.entity.wrapper.WrapperOrder;
 import com.ply.flashsalessystem.mapper.OrderForGoodsMapper;
+import com.ply.flashsalessystem.mapper.OrderRecordMapper;
 import com.ply.flashsalessystem.service.OrderForGoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.swagger.models.auth.In;
@@ -31,6 +32,9 @@ import java.util.List;
 public class OrderForGoodsServiceImpl extends ServiceImpl<OrderForGoodsMapper, OrderForGoods> implements OrderForGoodsService {
     @Autowired
     OrderForGoodsMapper orderForGoodsMapper;
+
+    @Autowired
+    OrderRecordMapper orderRecordMapper;
 
     /**
      * 分页条件查询 订单信息
@@ -63,7 +67,7 @@ public class OrderForGoodsServiceImpl extends ServiceImpl<OrderForGoodsMapper, O
             boolean b = orderForGoodsMapper.updateStatusById(ofgId, status);
             // 一旦修改成功的话 就必须添加到 订单 状态修改 表中去
             if (b){
-                orderForGoodsMapper.addOrderRecord(ofgId,status);
+                orderRecordMapper.addOrderRecord(ofgId,status);
             }
             log.info("{}:修改:{}",ofgId,b);
         }

@@ -24,6 +24,5 @@ public interface OrderForGoodsMapper extends BaseMapper<OrderForGoods> {
     boolean updateStatusById(@Param("id") Integer id,
                              @Param("status") Integer status);
 
-    void addOrderRecord(@Param("ofgId") Integer ofgId,
-                        @Param("storeDoSign") Integer status);
+
 }

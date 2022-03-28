@@ -27,3 +27,7 @@ target/
 hs_err_pid*
 log/
 log.path_IS_UNDEFINED/
+/HELP.md
+/mvnw
+/mvnw.cmd
+/pom.xml

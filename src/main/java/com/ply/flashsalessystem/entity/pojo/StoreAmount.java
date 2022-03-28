@@ -32,7 +32,7 @@ public class StoreAmount implements Serializable {
     private Long storeId;
 
     @ApiModelProperty(value = "金额")
-    private BigDecimal amount;
+    private Double amount;
 
     @ApiModelProperty(value = "默认是 0")
     private Integer status;

@@ -1,7 +1,7 @@
 package com.ply.flashsalessystem.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ply.flashsalessystem.entity.pojo.OrderForGoods;
 import com.ply.flashsalessystem.entity.pojo.Store;
 import com.ply.flashsalessystem.entity.result.Result;
@@ -13,10 +13,7 @@ import com.ply.flashsalessystem.service.OrderForGoodsService;
 import com.ply.flashsalessystem.service.StoreService;
 import com.ply.flashsalessystem.utils.UserUtils;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,17 +103,14 @@ public class StoreController {
     @ApiOperation("商家确定收货")
     public Result storeIsConfirmationOfReceipt(@RequestBody List<Integer> orderId) {
         //判断订单的 状态 是否是 店家未签收 只有店家未签收 时 才可以签收  其他的状态 都是 操作失败
-
-        WrapperOrder wrapperOrder = new WrapperOrder();
-        wrapperOrder.setStatus(OrderStatus.STORE_NO_SIGN);
-        Result result = orderForGoodsService.queryOrder(-1, -1, wrapperOrder);
-        List<OrderForStoreVo> rows = (List<OrderForStoreVo>) result.getData().get("rows");
-        log.info("需要修改的订单: {}", rows);
-
-
         List<Integer> orderIdList = new ArrayList<>();
-        for (OrderForStoreVo row : rows) {
-            orderIdList.add(row.getOfgId());
+
+        for (Integer integer : orderId) {
+            QueryWrapper<OrderForGoods> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("ofg_id",integer);
+            queryWrapper.eq("status",OrderStatus.STORE_NO_SIGN);
+            OrderForGoods one = orderForGoodsService.getOne(queryWrapper);
+            orderIdList.add(one.getOfgId());
         }
 
         boolean b = orderForGoodsService.updateOrderStatusById(orderIdList, OrderStatus.STORE_DO_SIGN);

@@ -14,6 +14,7 @@ import com.ply.flashsalessystem.service.StoreAmountService;
 import com.ply.flashsalessystem.service.StoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ply.flashsalessystem.utils.UserUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2022-03-23
  */
 @Service
+@Slf4j
 public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
     @Autowired
     StoreMapper storeMapper;
@@ -47,12 +49,13 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
      */
     @Override
     public boolean updateStoreDynamic(Store store) {
+        log.info("类:{}, 参数{}", StoreServiceImpl.class,store);
         //验证 name
-        if (storeMapper.selectOne(new QueryWrapper<Store>().eq("sname",store.getSname())) != null) {
+        if (storeMapper.selectOne(new QueryWrapper<Store>().eq("sname",store.getSname())) == null) {
             return false;
         }
         //验证iphone
-        if (storeMapper.selectOne(new QueryWrapper<Store>().eq("iphone",store.getIphone())) != null) {
+        if (storeMapper.selectOne(new QueryWrapper<Store>().eq("iphone",store.getIphone())) == null) {
             return false;
         }
         return storeMapper.updateStoreDynamic(store);
@@ -67,15 +70,14 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
      */
     @Override
     @Transactional
-    public boolean toCash(Double money) {
+    public boolean toCash(Store store,Double money) {
         //todo 可以优化sql 不需要查询  修改商家表
-        Store store = storeMapper.selectById(UserUtils.getUserId());
         store.setBalanceMoney((store.getBalanceMoney() - money));
         updateStoreDynamic(store);
 
         // 增加商家流水记录 表
         StoreAmount storeAmount = new StoreAmount();
-        storeAmount.setAmount((store.getBalanceMoney() - money));
+        storeAmount.setAmount((money));
         storeAmount.setStoreId(UserUtils.getUserId());
         storeAmount.setStatus(StoreAmountStatus.TO_CASH);
         storeAmountService.save(storeAmount);

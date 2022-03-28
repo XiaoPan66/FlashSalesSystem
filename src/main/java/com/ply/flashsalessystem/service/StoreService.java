@@ -18,5 +18,5 @@ public interface StoreService extends IService<Store> {
 
     boolean updateStoreDynamic(Store store);
 
-    boolean toCash(Double money);
+    boolean toCash(Store store,Double money);
 }

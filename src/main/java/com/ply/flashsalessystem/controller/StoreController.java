@@ -109,8 +109,11 @@ public class StoreController {
             QueryWrapper<OrderForGoods> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("ofg_id",integer);
             queryWrapper.eq("status",OrderStatus.STORE_NO_SIGN);
-            OrderForGoods one = orderForGoodsService.getOne(queryWrapper);
-            orderIdList.add(one.getOfgId());
+            OrderForGoods orderForGoods = orderForGoodsService.getOne(queryWrapper);
+            if (orderForGoods != null){
+                orderIdList.add(orderForGoods.getOfgId());
+            }
+
         }
 
         boolean b = orderForGoodsService.updateOrderStatusById(orderIdList, OrderStatus.STORE_DO_SIGN);
@@ -164,7 +167,7 @@ public class StoreController {
             return Result.error().message("提现金额 问题");
         }
 
-        boolean b = storeService.toCash(money);
+        boolean b = storeService.toCash(store,money);
 
         if (b){
             return Result.ok().message("提现成功: " + money);
@@ -172,6 +175,8 @@ public class StoreController {
 
         return Result.error().message("提现失败");
     }
+
+
 
 
 }

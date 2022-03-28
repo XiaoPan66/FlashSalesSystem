@@ -16,6 +16,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface OrderRecordMapper extends BaseMapper<OrderRecord> {
     void addOrderRecord(@Param("ofgId") Integer ofgId,
-                        @Param("storeDoSign") Integer status);
+                        @Param("status") Integer status);
 
 }

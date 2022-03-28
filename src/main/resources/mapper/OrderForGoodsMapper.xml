@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ply.flashsalessystem.mapper.OrderForGoodsMapper">
+    <insert id="addOrderRecord">
+        insert into order_record(status,ofg_id) values (#{status},#{ofgId})
+    </insert>
+    <update id="updateStatusById">
+        update order_for_goods set status = #{status} where ofg_id = #{id}
+    </update>
+
+
+    <select id="findAndPage" resultType="com.ply.flashsalessystem.entity.vo.OrderForStoreVo">
+        SELECT ofg_id,user_name,iphone,amount_due,amount_paid,amount_return,status,s.create_time,store_address
+        FROM order_for_goods ofg
+        LEFT JOIN user u ON ofg.user_id = u.user_id
+        LEFT JOIN store s on ofg.store_id = s.store_id
+        <where>
+            <if test="wr.userName !=null and wr.userName!=''">
+                and u.user_name like CONCAT('%',#{wr.userName},'%')
+            </if>
+            <if test="wr.status !=null and wr.status != ''">
+                and ofg.status = #{wr.status}
+            </if>
+            <if test="wr.iphone !=null and wr.iphone != ''">
+                and u.iphone = #{wr.iphone}
+            </if>
+
+            <if test="wr.storeId !=null and wr.storeId != ''">
+                and s.store_id = #{wr.storeId}
+            </if>
+
+            <if test="wr.createTime !=null and wr.createTime != ''">
+                and ofg.create_time > #{wr.createTime}
+            </if>
+        </where>
+    </select>
+</mapper>

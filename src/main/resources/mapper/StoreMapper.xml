@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ply.flashsalessystem.mapper.StoreMapper">
+    <update id="updateStoreDynamic">
+        update store
+        <trim prefix="set" suffixOverrides=",">
+            <if test="store.sname !=null and store.sname!=''">
+                sname = #{store.sname},
+            </if>
+            <if test="store.iphone !=null and store.iphone!=''">
+                iphone = #{store.iphone},
+            </if>
+            <if test="store.balanceMoney !=null and store.balanceMoney!=''">
+                balance_money = #{store.balanceMoney},
+            </if>
+            <if test="store.storeAddress !=null and store.storeAddress!=''">
+                store_address = #{store.storeAddress},
+            </if>
+            <if test="store.storeAddress !=null and store.storeAddress!=''">
+                pwd = #{store.pwd},
+            </if>
+        </trim>
+        where store_id = #{store.storeId}
+    </update>
+</mapper>

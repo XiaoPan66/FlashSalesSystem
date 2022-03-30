@@ -1,33 +1,24 @@
-package com.ply.flashsalessystem.entity.vo;
+package com.ply.flashsalessystem.entity.vo.user;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.ply.flashsalessystem.entity.pojo.Goods;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author XiaoPan
- * date: 2022/3/27 13:17
+ * date: 2022/3/31 0:17
  * <p>
  * action:
  */
 @Data
-public class OrderForStoreVo {
+public class OrderForUserVo {
 
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "订单id")
-    @TableId(value = "ofg_id", type = IdType.AUTO)
-    private Integer ofgId;
-
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "用户name")
     private String userName;
-
-    @ApiModelProperty(value = "用户联系电话")
-    private String iphone;
 
     @ApiModelProperty(value = "应付金额")
     private BigDecimal amountDue;
@@ -44,6 +35,10 @@ public class OrderForStoreVo {
     @ApiModelProperty(value = "订单时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "取货地址")
-    private String storeAddress;
+    @ApiModelProperty(value = "订单详情")
+    List<OrderDetailsUserVo> detailsUserVos;
+
+
+
+
 }

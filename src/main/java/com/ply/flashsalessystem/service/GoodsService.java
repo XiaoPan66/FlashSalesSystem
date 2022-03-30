@@ -1,9 +1,10 @@
 package com.ply.flashsalessystem.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ply.flashsalessystem.entity.pojo.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ply.flashsalessystem.entity.result.Result;
-import com.ply.flashsalessystem.entity.wrapper.GoodsQuery;
+import com.ply.flashsalessystem.entity.wrapper.GoodsWrapper;
 
 /**
  * <p>
@@ -38,6 +39,8 @@ public interface GoodsService extends IService<Goods> {
      */
     boolean deleteGoodsById(Long id);
 
+    Page<Goods> queryGoodsAll(long current, long limit, GoodsWrapper goodsWrapper);
 
-    Result queryGoodsAllPageByOdds(long current, long limit, GoodsQuery goodsQuery);
+
+    Result queryGoodsAllPageByOdds(long current, long limit, GoodsWrapper goodsWrapper);
 }

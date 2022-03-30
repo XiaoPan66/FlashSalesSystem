@@ -7,8 +7,8 @@
     </update>
 
 
-    <select id="findAndPage" resultType="com.ply.flashsalessystem.entity.vo.OrderForStoreVo">
-        SELECT ofg_id,user_name,iphone,amount_due,amount_paid,amount_return,status,s.create_time,store_address
+    <select id="findAndPage" resultType="com.ply.flashsalessystem.entity.vo.store.OrderForStoreVo">
+        SELECT ofg_id,user_name,u.iphone,amount_due,amount_paid,amount_return,status,s.create_time,store_address
         FROM order_for_goods ofg
         LEFT JOIN user u ON ofg.user_id = u.user_id
         LEFT JOIN store s on ofg.store_id = s.store_id
@@ -20,15 +20,18 @@
                 and ofg.status = #{wr.status}
             </if>
             <if test="wr.iphone !=null and wr.iphone != ''">
-                and u.iphone = #{wr.iphone}
+                and u.iphone like CONCAT('%',#{wr.iphone},'%')
             </if>
 
             <if test="wr.storeId !=null and wr.storeId != ''">
                 and s.store_id = #{wr.storeId}
             </if>
 
-            <if test="wr.createTime !=null and wr.createTime != ''">
-                and ofg.create_time > #{wr.createTime}
+            <if test="wr.createTimeMin !=null and wr.createTimeMin != ''">
+                and ofg.create_time &gt;= #{wr.createTimeMin}
+            </if>
+            <if test="wr.createTimeMax !=null and wr.createTimeMax != ''">
+                and ofg.create_time &lt;= #{wr.createTimeMax}
             </if>
         </where>
     </select>

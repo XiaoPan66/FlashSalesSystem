@@ -4,7 +4,7 @@ package com.ply.flashsalessystem.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ply.flashsalessystem.entity.pojo.Goods;
 import com.ply.flashsalessystem.entity.result.Result;
-import com.ply.flashsalessystem.entity.wrapper.GoodsQuery;
+import com.ply.flashsalessystem.entity.wrapper.GoodsWrapper;
 import com.ply.flashsalessystem.service.GoodsService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +54,11 @@ public class GoodsController {
     @GetMapping("queryGoodsAllPageByOdds/{current}/{limit}")
     public Result queryGoodsAllPageByOdds(@PathVariable("current") long current,
                                           @PathVariable("limit") long limit,
-                                          @RequestBody GoodsQuery goodsQuery) {
+                                          @RequestBody GoodsWrapper goodsWrapper) {
         if (!(current >= 0 && limit >= 0)) {
             return Result.error();
         }
-        return  goodsService.queryGoodsAllPageByOdds(current,limit,goodsQuery);
+        return  goodsService.queryGoodsAllPageByOdds(current,limit, goodsWrapper);
     }
 
 

@@ -2,4 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ply.flashsalessystem.mapper.UserMapper">
 
+    <select id="getUserAll" resultType="com.ply.flashsalessystem.entity.pojo.User">
+                select user_id, user_name, pwd, iphone, avatar, dafault_address, balance_money, store_id
+                from user
+                <where>
+                    <if test="uw.name!= null and uw.name != ''">
+                        and user_name like CONCAT('%',#{uw.userName},'%')
+                    </if>
+
+                     <if test="uw.storeId!= null and uw.storeId != ''">
+                        and  store_id = #{uw.storeId}
+                    </if>
+
+                     <if test="uw.storeId!= null and uw.storeId != ''">
+                        and  store_id like CONCAT('%', #{uw.iphone},'%')
+                    </if>
+
+                    <if test="uw.createTimeMin != null and uw.createTimeMin != ''">
+                        and  create_time &gt;= #{uw.createTimeMin}
+                    </if>
+
+                    <if test="uw.createTimeMax != null and uw.createTimeMax != ''">
+                        and  create_time &gt;= #{uw.createTimeMax}
+                    </if>
+                </where>
+
+
+    </select>
 </mapper>

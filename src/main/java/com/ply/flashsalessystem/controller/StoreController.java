@@ -1,16 +1,17 @@
 package com.ply.flashsalessystem.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ply.flashsalessystem.entity.pojo.OrderForGoods;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ply.flashsalessystem.entity.pojo.Store;
+import com.ply.flashsalessystem.entity.pojo.User;
 import com.ply.flashsalessystem.entity.result.Result;
-import com.ply.flashsalessystem.entity.status.OrderStatus;
-import com.ply.flashsalessystem.entity.vo.OrderForStoreVo;
-import com.ply.flashsalessystem.entity.vo.StoreVo;
+import com.ply.flashsalessystem.entity.vo.store.StoreVo;
+import com.ply.flashsalessystem.entity.vo.store.UserToStoreVo;
+import com.ply.flashsalessystem.entity.wrapper.UserWrapper;
 import com.ply.flashsalessystem.entity.wrapper.WrapperOrder;
 import com.ply.flashsalessystem.service.OrderForGoodsService;
 import com.ply.flashsalessystem.service.StoreService;
+import com.ply.flashsalessystem.service.UserService;
 import com.ply.flashsalessystem.utils.UserUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class StoreController {
 
     @Autowired
     StoreService storeService;
+
+    @Autowired
+    UserService userService;
 
     //邀请用户注册(生成邀请码 也就是id)
     @GetMapping("inviteUser")
@@ -98,25 +102,13 @@ public class StoreController {
      * @param orderId id 列表
      * @return 成功或者失败
      */
-    //todo 需要添加事务 一条没成功 就所有没有成功
+    // 需要添加事务 一条没成功 就所有没有成功
+    // 已经添加 事务了
     @PostMapping("storeIsConfirmationOfReceipt")
     @ApiOperation("商家确定收货")
     public Result storeIsConfirmationOfReceipt(@RequestBody List<Integer> orderId) {
         //判断订单的 状态 是否是 店家未签收 只有店家未签收 时 才可以签收  其他的状态 都是 操作失败
-        List<Integer> orderIdList = new ArrayList<>();
-
-        for (Integer integer : orderId) {
-            QueryWrapper<OrderForGoods> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("ofg_id",integer);
-            queryWrapper.eq("status",OrderStatus.STORE_NO_SIGN);
-            OrderForGoods orderForGoods = orderForGoodsService.getOne(queryWrapper);
-            if (orderForGoods != null){
-                orderIdList.add(orderForGoods.getOfgId());
-            }
-
-        }
-
-        boolean b = orderForGoodsService.updateOrderStatusById(orderIdList, OrderStatus.STORE_DO_SIGN);
+        boolean b = storeService.storeIsConfirmationOfReceipt(orderId);
 
         if (b) {
             return Result.ok();
@@ -132,7 +124,6 @@ public class StoreController {
     public Result queryStore() {
         Store store = storeService.getById(UserUtils.getUserId());
         StoreVo storeVo = StoreVo.add(store);
-
         return Result.ok().data("storeVo", storeVo);
     }
 
@@ -167,17 +158,37 @@ public class StoreController {
             return Result.error().message("提现金额 问题");
         }
 
-        boolean b = storeService.toCash(store,money);
+        boolean b = storeService.toCash(store, money);
 
-        if (b){
+        if (b) {
             return Result.ok().message("提现成功: " + money);
         }
 
         return Result.error().message("提现失败");
     }
 
+    //    7    查看邀请成功的用户
+    @PostMapping("getInvited/{current}/{limit}")
+    @ApiOperation("商家查看邀请成功的用户")
+    public Result getInvited(@PathVariable("current") Integer current,
+                             @PathVariable("limit") Integer limit,
+                             @RequestBody(required = false) UserWrapper userWrapper) {
+        if (userWrapper == null){
+            userWrapper = new UserWrapper();
+        }
 
+        Page<User> userToStore = userService.getUserToStore(current, limit, userWrapper);
 
+        List<UserToStoreVo> list = new ArrayList<>();
+        //给前端 的数据处理
 
+        for (User record : userToStore.getRecords()) {
+            UserToStoreVo user = new UserToStoreVo();
+            user.setUserName(record.getUserName());
+            user.setIphone(record.getIphone());
+            list.add(user);
+        }
+        return Result.ok().data("total", list).data("rows",list);
+    }
 }
 

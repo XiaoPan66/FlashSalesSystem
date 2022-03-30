@@ -27,8 +27,8 @@ public class Tag implements Serializable {
     @TableId(value = "tag_id", type = IdType.AUTO)
     private Integer tagId;
 
-    @ApiModelProperty(value = "name")
-    private String name;
+    @ApiModelProperty(value = "tagName")
+    private String tagName;
 
 
 }

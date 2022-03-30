@@ -3,6 +3,8 @@ package com.ply.flashsalessystem.entity.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,6 +38,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "买家密码")
     private String pwd;
 
+    @ApiModelProperty(value = "邀请人id")
     private Long storeId;
 
     @ApiModelProperty(value = "头像")
@@ -46,6 +49,9 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "账户余额")
     private Double balanceMoney;
+
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 
 
 }

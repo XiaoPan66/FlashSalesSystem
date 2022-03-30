@@ -31,3 +31,6 @@ log.path_IS_UNDEFINED/
 /mvnw
 /mvnw.cmd
 /pom.xml
+/src/test/
+/src/test/
+/src/test/java/com/ply/flashsalessystem/

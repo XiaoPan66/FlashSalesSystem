@@ -12,10 +12,12 @@ import java.math.BigDecimal;
  * action:   分页显示商品 条件
  */
 @Data
-public class GoodsQuery {
+public class GoodsWrapper {
+    @ApiModelProperty(value = "商品 name")
     private String name;
 
-    private Long tagId;
+    @ApiModelProperty(value = "分类 id")
+    private Integer tagId;
 
     @ApiModelProperty(value = "小 商品售价")
     private BigDecimal minPrice;
@@ -25,10 +27,4 @@ public class GoodsQuery {
 
     @ApiModelProperty(value = "剩余量 	( 可 售出量 )")
     private BigDecimal remainNums;
-
-    @ApiModelProperty(value = "月销量 ")
-    private BigDecimal salesMonth;
-
-    @ApiModelProperty(value = "总销量")
-    private BigDecimal salesAll;
 }

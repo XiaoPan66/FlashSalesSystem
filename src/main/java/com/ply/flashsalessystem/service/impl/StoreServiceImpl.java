@@ -5,6 +5,7 @@ import com.ply.flashsalessystem.entity.pojo.OrderForGoods;
 import com.ply.flashsalessystem.entity.pojo.Store;
 import com.ply.flashsalessystem.entity.pojo.StoreAmount;
 import com.ply.flashsalessystem.entity.result.Result;
+import com.ply.flashsalessystem.entity.status.OrderStatus;
 import com.ply.flashsalessystem.entity.status.StoreAmountStatus;
 import com.ply.flashsalessystem.entity.wrapper.WrapperOrder;
 import com.ply.flashsalessystem.mapper.StoreAmountMapper;
@@ -18,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +39,9 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
     @Autowired
     StoreAmountService storeAmountService;
+
+    @Autowired
+    OrderForGoodsService orderForGoodsService;
 
     /**
      * 修改 store 信息
@@ -83,5 +90,26 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         storeAmountService.save(storeAmount);
 
         return true;
+    }
+
+    /**
+     * 商家签收
+     */
+    @Override
+    @Transactional
+    public boolean storeIsConfirmationOfReceipt(List<Integer> orderId) {
+        List<Integer> orderIdList = new ArrayList<>();
+
+        for (Integer integer : orderId) {
+            QueryWrapper<OrderForGoods> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("ofg_id", integer);
+            queryWrapper.eq("status", OrderStatus.STORE_NO_SIGN);
+            OrderForGoods orderForGoods = orderForGoodsService.getOne(queryWrapper);
+            if (orderForGoods != null) {
+                orderIdList.add(orderForGoods.getOfgId());
+            }
+        }
+
+        return orderForGoodsService.updateOrderStatusById(orderIdList, OrderStatus.STORE_DO_SIGN);
     }
 }

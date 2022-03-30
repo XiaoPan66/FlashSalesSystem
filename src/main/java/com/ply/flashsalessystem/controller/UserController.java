@@ -17,7 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/flashsalessystem/user")
 public class UserController {
-
+    /**
+     * 1    对于商品 查看
+     *
+     * 2    对于购物车 增删改查
+     *
+     * 3    对于订单  增 查
+     *
+     * 4    为订单 付款
+     *
+     * 5    对于个人信息的 改查
+     */
 
 
 

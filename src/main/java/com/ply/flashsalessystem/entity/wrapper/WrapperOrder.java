@@ -26,7 +26,10 @@ public class WrapperOrder {
     @ApiModelProperty(value = "订单状态")
     private Integer status;
 
-    @ApiModelProperty(value = "订单创建时间")
-    private Date createTime;
+    @ApiModelProperty(value = "订单创建时间 最小")
+    private Date createTimeMin;
+
+    @ApiModelProperty(value = "订单创建时间 最大")
+    private Date createTimeMax;
 
 }

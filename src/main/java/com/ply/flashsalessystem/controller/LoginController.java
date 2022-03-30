@@ -138,7 +138,6 @@ public class LoginController {
         if (!StringUtils.isEmpty(StoreId)){
             user.setStoreId(StoreId);
         }
-
         return userService.save(user);
     }
 

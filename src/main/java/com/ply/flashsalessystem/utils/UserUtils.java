@@ -17,7 +17,7 @@ public class UserUtils {
     private static final String USERNAME = "Name";
     private static final String USERID = "Id";
 //    用户类型
-    private static String TYPE = "type";
+    private static final String TYPE = "type";
 
     public static String getUserName() {
 //        ThreadLocal<Integer> userIdL = new ThreadLocal<>();

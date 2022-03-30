@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ply.flashsalessystem.mapper.GoodsMapper">
 
+    <select id="queryGoodsAllPage" resultType="com.ply.flashsalessystem.entity.pojo.Goods">
+        select goods_id, tag_id, name, price, remain_nums, details, image, putaway, min_sales
+        from goods
+        <where>
+            <if test="gq.name !=null and gq.name!=''">
+                and name like CONCAT('%',#{gq.name},'%')
+            </if>
+
+            <if test="gq.tagId !=null and gq.tagId!=''">
+                and tag_id = #{gq.tagId}
+            </if>
+
+            <if test="gq.minPrice !=null and gq.minPrice!=''">
+                and price &gt;= #{gq.minPrice}
+            </if>
+            <if test="gq.maxPrice !=null and gq.maxPrice!=''">
+                and price &lt; #{gq.maxPrice}
+            </if>
+        </where>
+    </select>
 </mapper>

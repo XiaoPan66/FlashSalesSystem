@@ -1,27 +1,20 @@
-package com.ply.flashsalessystem.entity.pojo;
+package com.ply.flashsalessystem.entity.vo.manage;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.math.BigDecimal;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author XiaoPan
- * @since 2022-03-23
+ * date: 2022/3/29 15:12
+ * <p>
+ * action:
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Goods对象", description="")
-public class Goods implements Serializable {
-
+public class GoodsForManageVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "商品id")
@@ -31,23 +24,25 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "商品 name")
     private String name;
 
-    @ApiModelProperty(value = "分类 id")
-    private Integer tagId;
+    @ApiModelProperty(value = "tag name")
+    private Integer tagName;
 
     @ApiModelProperty(value = "商品售价")
     private BigDecimal price;
 
-    @ApiModelProperty(value = "剩余量 	( 可 售出量 )")
+    @ApiModelProperty(value = "剩余量  ( 可 售出量 )")
     private BigDecimal remainNums;
-
-    @ApiModelProperty(value = "商品上下架, 0表示下架的情况 1表示上架的情况")
-    private Integer putAway;
 
     @ApiModelProperty(value = "details详情")
     private String details;
 
+    @ApiModelProperty(value = "商品上下架, 0表示下架的情况 1表示上架的情况")
+    private Integer putAway;
+
+    @ApiModelProperty(value = "商品图片")
     private String image;
 
     @ApiModelProperty(value = "最少起售 单位 克g")
     private double minSales;
+
 }
